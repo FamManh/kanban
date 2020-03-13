@@ -1,0 +1,1 @@
+export const BOARD_CREATE = `BOARD_CREATE`

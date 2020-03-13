@@ -1,0 +1,41 @@
+color: 
+    - yellow
+    - green
+    - blue
+    - red
+    - orange
+    - purple
+    - magenta
+    - cyan
+
+user: 
+    - email
+    - password
+    - fullname
+    - avatar
+
+board: 
+    - columns: [columns]
+    - sort
+    - name
+    - admins
+    - members
+
+columns: 
+    - id
+    - name
+    - description
+    - taskProperties : [
+        description: [true | false]
+        label: [true | false]
+        subtask: [true | false]
+        limitTaskCount: 10 | null
+    ]
+task:
+    - name
+    - color
+    - members
+    - labels []
+    - description
+    - columnId
+
