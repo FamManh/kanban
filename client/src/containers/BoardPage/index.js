@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import { Link } from 'react-router-dom'
 import * as constant from './constant'
 import selector from './selector'
+import Taskboard from './Taskboard'
 
 export default function Board() {
     const [value, setValue] = useState('')
@@ -16,13 +17,13 @@ export default function Board() {
             payload: value
         })
     }
-    return (
-        <div>
-            this is board page
-            <Input onChange={e=>setValue(e.target.value)}/>
-            <Button onClick={handleClick}>Change</Button>
-    <p>{naem}</p>
-    <Button><Link to="/">Go to Home Page</Link></Button>
-        </div>
+    return (<Taskboard/>
+    //     <div>
+    //         this is board page
+    //         <Input onChange={e=>setValue(e.target.value)}/>
+    //         <Button onClick={handleClick}>Change</Button>
+    // <p>{naem}</p>
+    // <Button><Link to="/">Go to Home Page</Link></Button>
+    //     </div>
     )
 }
