@@ -10,6 +10,8 @@ import {
   Link
 } from "react-router-dom";
 import { ConnectedRouter } from 'connected-react-router';
+import { GlobalStyles } from './components/GlobalStyles';
+import Layout from './containers/Layout';
 
 const store = configStore()
 
@@ -18,22 +20,19 @@ const HomePage = () => {
 }
 function App() {
   return (
-    <Provider store={store}>
-      <ConnectedRouter history={getHistory()}>
-        <div className="App">
-          
-            {/* A <Switch> looks through its children <Route>s and
+      <Provider store={store}>
+          <ConnectedRouter history={getHistory()}>
+                  <Layout>
+                      {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-            <Switch>
-              <Route path="/board" exact component={Board}/>
-              <Route path="/" exact component={HomePage}/>
-                
-            </Switch>
-        
-        </div>
-      </ConnectedRouter>
-
-    </Provider>
+                      <Switch>
+                          <Route path="/board" exact component={Board} />
+                          <Route path="/" exact component={HomePage} />
+                      </Switch>
+                  </Layout>
+          </ConnectedRouter>
+          <GlobalStyles />
+      </Provider>
   );
 }
 
