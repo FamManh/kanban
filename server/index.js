@@ -1,25 +1,18 @@
-const express = require("express");
-const bodyParser = require('body-parser')
-const routes = require("./routes");
-var mongoose = require("mongoose");
+Promise = require('bluebird');
+const app = require('./src/config/express')
+const mongoose = require("./src/config/mongoose");
+const {port, env} = require('./src/config/vars');
+const logger = require('./src/config/logger');
 
-// init express app
-const app = express();
+// open mongoose connection
+mongoose.connect();
 
-// middleware
-// parse application/x-www-form-urlencoded
-// parse application/json
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
 
-// connect to mongodb
-mongoose.connect("mongodb://localhost:27017/kanban", { useNewUrlParser: true });
+// listen to requests 
+app.listen(port, ()=>logger.info(`Server started on port ${port} (${env})`));
 
-// routes
-app.use("/", routes.auth);
-
-// post put patch
-
-const port = 5000;
-// app listen 
-app.listen(port);
+/**
+ * Exports express
+ * @public
+ */
+module.exports = app;
