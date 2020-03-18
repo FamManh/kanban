@@ -8,7 +8,6 @@ const jwtOptions = {
     secretOrKey: jwtSecret,
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("Bearer")
 };
-
 const jwt = async(payload, done)=>{
     try{
         const user = await User.findById(payload.sub);

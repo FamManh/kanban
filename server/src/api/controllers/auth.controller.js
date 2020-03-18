@@ -1,58 +1,40 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
-const saltRounds = 1;
-var jwt = require("jsonwebtoken");
-const privateKey = "SDFASDFASHJDFJASJDFH";
+const jwt = require("jsonwebtoken");
+const {jwtSecret, jwtExpirationInterval} = require('../../config/vars')
+const {omit} = require('lodash')
+const moment = require('moment');
+const httpStatus = require('http-status')
 
-exports.register = async (req, res) => {
+
+const generateTokenResponse = (user, accessToken)=>{
+    const expiresIn = moment().add(jwtExpirationInterval, 'minutes');
+    return {
+        accessToken, expiresIn
+    }
+}
+
+exports.register = async (req, res, next) => {
     try {
-        bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
-            if (err) {
-                throw new Error("Error");
-            }
-            await User.create({ ...req.body, password: hash });
-            res.json({ message: "succesfuly" });
-        });
-        return;
+        const userData = omit(req.body, 'role');
+        const user = await new User(userData).save();
+        const userTransformed = user.transoform();
+        const token = generateTokenResponse(userTransformed, user.token());
+        res.status(httpStatus.CREATED);
+        
+        return res.json({ token, userTransformed });
     } catch (error) {
-        console.log(error);
-        res.status(400).json({ error });
+        next(error);
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
-        if (!user) {
-            // check !user
-            return res.status(400).json({
-                error: "User with this email does not exists."
-            });
-        }
-
-        // hash pasword
-        await bcrypt.compare(req.body.password, user.password, function(
-            err,
-            result
-        ) {
-            
-            if (!result) {
-                // error
-                return res
-                    .status(400)
-                    .json({ error: "Email or password incorrect" });
-            }
-
-            // generate jsonwebtoken
-            const token = jwt.sign(
-                { id: user.id, email: user.email },
-                privateKey,
-                { expiresIn: "1h" }
-            );
-            return res.json({ user, token });
-        });
+        const { user, accessToken } = await User.findAndGenerateToken(req.body);
+        const token = generateTokenResponse(user, accessToken);
+        const userTransformed = user.transoform();
+        return res.json({token, user: userTransformed})
     } catch (error) {
-        console.log(error);
-        res.status(400).json({ error });
+        next(error)
     }
 };

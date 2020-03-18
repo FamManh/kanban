@@ -24,6 +24,6 @@ exports.connect = ()=>{
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: false
-    }).then(()=> console.log('mongoDB connected ...'));
+    }).then(()=> console.log('MongoDB connected ...'));
     return mongoose.connection;
 }

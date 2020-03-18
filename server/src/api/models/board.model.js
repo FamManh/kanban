@@ -20,8 +20,6 @@ const boardSchema = new mongoose.Schema({
             name: String
         }
     ]
-        
-    
 });
 
 module.exports = new mongoose.model("Board", boardSchema);
