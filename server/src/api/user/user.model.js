@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
 const {env, jwtExpirationInterval, jwtSecret} = require('../../config/vars')
-const userRoles = ['user', 'admin'];
 const bcrypt = require('bcrypt');
 const moment = require('moment');
 const jwt = require("jwt-simple");
 const httpStatus = require('http-status')
-const APIError = require('../utils/APIError')
+const APIError = require('../../utils/APIError')
+
+const roles = ["user", "admin"];
+
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -71,6 +73,7 @@ userSchema.method({
 });
 
 userSchema.statics = {
+    roles,
     /**
      * 
      * @param {} options 
@@ -84,7 +87,6 @@ userSchema.statics = {
             status: httpStatus.BAD_REQUEST,
             isPublic: true
         };
-        console.log(this.email);
         if (!user) {
             err.message = "This account does not exists";
         } else if (password) {
