@@ -1,4 +1,4 @@
-const Board = require("./board.model");
+const Board = require("./model");
 const httpStatus = require("http-status");
 const APIError = require("../../utils/APIError");
 
