@@ -2,10 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const morgan = require('morgan')
 const passport = require('passport')
-const routes = require('../api/routes/v1')
+const routes = require('../api/routes')
 const {logs } = require('./vars')
 const strategies = require('./passport')
-const error = require('../api/middlewares/error')
+const error = require('../middlewares/error')
+const { ValidationError } = require("express-validation");
 
 /**
  * Express instance
