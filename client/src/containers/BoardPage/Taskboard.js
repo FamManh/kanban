@@ -4,7 +4,7 @@ import reorder, { reorderQuoteMap } from "./taskboard/reorder";
 import Column from "./taskboard/Column";
 import MockTaskboard from "./mock";
 import styled from "styled-components";
-import { UserOutlined, DownloadOutlined, CaretDownOutlined, DownOutlined, PlusCircleFilled, PlusOutlined } from "@ant-design/icons";
+import { UserOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Menu } from 'antd';
 import Text from 'antd/lib/typography/Text';
 

@@ -67,7 +67,7 @@ userSchema.method({
         };
         return jwt.encode(payload, jwtSecret);
     },
-    passwordMatches(password){
+    async passwordMatches(password){
         return bcrypt.compare(password, this.password)
     }
 });
@@ -90,7 +90,7 @@ userSchema.statics = {
         if (!user) {
             err.message = "This account does not exists";
         } else if (password) {
-            if (user && user.passwordMatches(password)) {
+            if (user && (await user.passwordMatches(password))) {
                 return {
                     user,
                     accessToken: user.token()
@@ -99,8 +99,26 @@ userSchema.statics = {
             err.message = "Inconnect email or password";
         }
         throw new APIError(err);
+    },
+
+    checkDuplicateEmail(error){
+        if(error.name === "MongoError" && error.code === 11000){
+            return new APIError({
+                message: "Email already exists",
+                errors: [
+                    {
+                        field: "email",
+                        location: "body",
+                        messages: ["email already exists"]
+                    }
+                ],
+                status: httpStatus.BAD_REQUEST,
+                isPublic: true,
+                stack: error.stack
+            });
+        }
+        return error;
     }
 };
-
 
 module.exports = new mongoose.model("User", userSchema);

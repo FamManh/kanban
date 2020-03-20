@@ -1,5 +1,5 @@
 import { Layout as AntLayout } from "antd";
-import React, { Component } from "react";
+import React from "react";
 import Header from "./Header";
 import LayoutWrapper from "./styles/LayoutWrapper";
 const { Content } = AntLayout;

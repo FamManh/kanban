@@ -79,7 +79,12 @@ exports.list = async (req, res, next) => {
  */
 exports.remove = async (req, res, next) => {
    try {
-       const task = Object.assign(req.locals.task, {'deletedAt': new Date()});
+        const removeInfo = {
+            deletedBy: req.user._id,
+            deletedAt: new Date(),
+            location: req.locals.task.columnId
+        };
+       const task = Object.assign(req.locals.task, { deleted: removeInfo });
        let savedTask = await task.save();
        return res.json(savedTask.transform());
    } catch (error) {
