@@ -1,13 +1,14 @@
-import { Layout, Menu, Dropdown, Avatar, Button, Badge } from 'antd';
-import {LogoutOutlined, UserOutlined, PlusOutlined} from "@ant-design/icons";
+import { Layout, Menu, Dropdown, Avatar } from 'antd';
+import {LogoutOutlined, UserOutlined} from "@ant-design/icons";
 import React from 'react';
+import authActions from '../AuthPage/actions';
 import HeaderWrapper from './styles/HeaderWrapper';
 const { Header: AntHeader } = Layout;
 
 
 const Header = () => {
   let doSignout = () => {
-    // actions.doSignout();
+    authActions.doSignout()
   };
 
   let doNavigateToProfile = () => {

@@ -1,0 +1,11 @@
+const constants = {
+    SIGNUP_START: "SIGNUP_START",
+    SIGNUP_SUCCESS: "SIGNUP_SUCCESS",
+    SIGNUP_ERROR: "SIGNUP_ERROR",
+
+    SIGNIN_START: "SIGNIN_START",
+    SIGNIN_SUCCESS: "SIGNIN_SUCCESS",
+    SIGNIN_ERROR: "SIGNIN_ERROR"
+};
+
+export default constants;

@@ -7,12 +7,15 @@ const {logs } = require('./vars')
 const strategies = require('./passport')
 const error = require('../middlewares/error')
 const { ValidationError } = require("express-validation");
+const cors = require('cors')
 
 /**
  * Express instance
  * @public
  */
 const app = express();
+
+app.use(cors());
 
 // request logging. dev: console | production: file
 app.use(morgan(logs));

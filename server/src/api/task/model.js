@@ -1,34 +1,50 @@
 const mongoose = require("mongoose");
 
-const taskSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        maxlength: 50,
-        trim: true,
-        required: true
-    },
-    description: {
-        type: String,
-        maxlength: 50,
-        trim: true,
-        required: true
-    },
-    labels: [String],
-    color: String,
-    members: [
-        {
-            userId: {
+const taskSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            maxlength: 50,
+            trim: true,
+            required: true
+        },
+        description: {
+            type: String,
+            maxlength: 50,
+            trim: true,
+            required: true
+        },
+        labels: [String],
+        color: String,
+        members: [
+            {
+                userId: {
+                    type: mongoose.Types.ObjectId,
+                    ref: "User"
+                }
+            }
+        ],
+        columnId: {
+            type: mongoose.Types.ObjectId,
+            ref: "Column"
+        },
+        sortOrder: Number,
+        deleted: {
+            deletedBy: {
                 type: mongoose.Types.ObjectId,
                 ref: "User"
+            },
+            deletedAt: {
+                type: Date
+            },
+            location: {
+                type: mongoose.Types.ObjectId,
+                ref: "Column"
             }
         }
-    ],
-    columnId: {
-        type: mongoose.Types.ObjectId,
-        ref: "Column"
     },
-    sortOrder: Number
-});
+    { timestamps: true }
+);
 
 /**
  * Statics
