@@ -1,8 +1,8 @@
-import React from "react";
+import React,{ useState } from "react";
 import { Steps, Button, message, Input, Form, Modal } from "antd";
-import { useState } from "react";
+import {useSelector, useDispatch} from "react-redux";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-
+import actions from '../actions'
 const { Step } = Steps;
 
 const steps = [
@@ -13,10 +13,6 @@ const steps = [
     {
         title: "Columns",
         content: "Columns"
-    },
-    {
-        title: "Limit",
-        content: "Limit work in process"
     }
 ];
 
@@ -30,69 +26,60 @@ const layout = {
 };
 
 function FormComponent() {
+    const dispatch = useDispatch();
     const [currentStep, setCurrentStep] = useState(0);
-    const [boardName, setBoardName] = useState("")
-    const [boardColumns, setBoardColumns] = useState([])
+    const [boardName, setBoardName] = useState("");
+    const [boardColumns, setBoardColumns] = useState([]);
 
-     const onNext = () => {
-        if (currentStep == 0) {
-             if (boardName.trim() === "") {
-                 Modal.warning({
-                     title: "Board's name is required!"
-                 });
-                 return;
-             }
-        }else if(currentStep === 1){
-            if(!boardColumns.length){
-                Modal.warning({
-                    title: "At least 1 column"
-                });
-                return;
-            }
-            let isNameNull = false;
-            boardColumns.forEach(item=>{
-                if(!item.name.trim()){
-                    isNameNull = true
-                    
-                }
-            })
-            if(isNameNull){
-                Modal.warning({
-                    title: "Column's name is required!"
-                });
-                return;
-            }
-            
-
+    const onNext = () => {
+        if (boardName.trim() === "") {
+            Modal.warning({
+                title: "Board name is required!"
+            });
+            return;
         }
         setCurrentStep(currentStep + 1);
-     };
+    };
 
-     const onPrev = () => setCurrentStep(currentStep -1);
+    const onPrev = () => setCurrentStep(currentStep - 1);
+
+    const onDone = () => {
+        if (!boardColumns.length) {
+            Modal.warning({
+                title: "At least 1 column"
+            });
+            return;
+        }
+        let isNameNull = false;
+        boardColumns.forEach(item => {
+            if (!item.name.trim()) {
+                isNameNull = true;
+            }
+        });
+        if (isNameNull) {
+            Modal.warning({
+                title: "Column name is required!"
+            });
+            return;
+        }
+        dispatch(actions.doCreate({name: boardName, columns: boardColumns}));
+    };
 
     const renderButton = () => (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>
-                {currentStep > 0 && (
-                    <Button onClick={onPrev}>
-                        Previous
-                    </Button>
-                )}
+                {currentStep > 0 && <Button onClick={onPrev}>Previous</Button>}
             </div>
             <div>
                 {currentStep < steps.length - 1 && (
-                    <Button
-                        htmlType="submit"
-                        type="primary"
-                        onClick={onNext}
-                    >
+                    <Button htmlType="submit" type="primary" onClick={onNext}>
                         Next
                     </Button>
                 )}
                 {currentStep === steps.length - 1 && (
                     <Button
                         type="primary"
-                        onClick={() => message.success("Processing complete!")}
+                        onClick={onDone}
                     >
                         Done
                     </Button>
@@ -111,31 +98,31 @@ function FormComponent() {
 
     const renderFirstStep = () => (
         <Form.Item label="Board name">
-            <Input onChange={e=>setBoardName(e.target.value)}/>
+            <Input onChange={e => setBoardName(e.target.value)} />
         </Form.Item>
     );
 
-    const formListChange = (index, value)=>{
-        let columns = boardColumns
-        columns[index] = {name: value, limit: null};
+    const formListChange = (index, value) => {
+        let columns = boardColumns;
+        columns[index] = { name: value };
         setBoardColumns(columns);
-    }
+    };
 
     const renderSecondStep = () => (
-        <Form.List name="names" >
+        <Form.List name="names">
             {(fields, { add, remove }) => {
                 return (
                     <div>
                         {fields.map((field, index) => (
                             <Form.Item required={false} key={field.key}>
-                                <Form.Item key={field.key}
+                                <Form.Item
+                                    key={field.key}
                                     {...field}
                                     validateTrigger={["onChange", "onBlur"]}
                                     noStyle
                                 >
                                     <Input
                                         onChange={e => {
-                                            console.log(fields);
                                             formListChange(
                                                 index,
                                                 e.target.value
@@ -150,8 +137,8 @@ function FormComponent() {
                                         className="dynamic-delete-button"
                                         onClick={() => {
                                             const columns = boardColumns;
-                                            columns.splice(index, 1)
-                                            setBoardColumns(columns)
+                                            columns.splice(index, 1);
+                                            setBoardColumns(columns);
                                             remove(field.name);
                                         }}
                                     />
@@ -163,13 +150,13 @@ function FormComponent() {
                                 type="dashed"
                                 onClick={() => {
                                     const columns = boardColumns;
-                                    columns.push({name: "", limit: null});
+                                    columns.push({ name: ""});
                                     setBoardColumns(columns);
                                     add();
                                 }}
                                 style={{ width: "60%" }}
                             >
-                                <PlusOutlined /> Add field
+                                <PlusOutlined /> Add column
                             </Button>
                         </Form.Item>
                     </div>
@@ -178,9 +165,7 @@ function FormComponent() {
         </Form.List>
     );
     const renderThirdStep = () => (
-        <Form.Item
-            label="Board name 2"
-        >
+        <Form.Item label="Board name 2">
             <Input />
         </Form.Item>
     );

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const shortid = require("shortid");
 
 const columnSchema = new mongoose.Schema(
     {
@@ -30,6 +31,10 @@ const columnSchema = new mongoose.Schema(
         boardId: {
             type: mongoose.Types.ObjectId,
             ref: "Board"
+        },
+        shortid: {
+            type: String,
+            default: shortid.generate()
         }
     },
     { timestamps: true }
@@ -82,7 +87,8 @@ columnSchema.method({
             "name",
             "description",
             "taskProperties",
-            "boardId"
+            "boardId",
+            "shortid"
         ];
 
         fields.forEach(field => {

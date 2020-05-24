@@ -1,5 +1,5 @@
 import React from "react";
-import { Inner, Wrapper } from "../styles/Taskboard";
+import { Inner, Wrapper } from "../BoardPage/styles/Taskboard";
 
 import { Draggable } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
@@ -9,7 +9,15 @@ import { PlusOutlined } from "@ant-design/icons";
 const Column = ({ title, tasks, index }) => (
     <Draggable draggableId={title} index={index}>
         {provided => (
-            <Wrapper key={index}>
+            <Wrapper
+                key={index}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                style={{
+                    ...provided.draggableProps.style
+                }}
+            >
                 <Inner>
                     <div
                         style={{
@@ -24,6 +32,7 @@ const Column = ({ title, tasks, index }) => (
                         </div>
                     </div>
                     <div
+                        style={{width: '400px'}}
                         className="p-1 scroll-y"
                         ref={provided.innerRef}
                         {...provided.draggableProps}

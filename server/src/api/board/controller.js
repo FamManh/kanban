@@ -1,4 +1,5 @@
 const Board = require("./model");
+const Column = require('../column/model')
 const httpStatus = require("http-status");
 const APIError = require("../../utils/APIError");
 
@@ -26,8 +27,11 @@ exports.load = async (req, res, next, id) => {
 exports.get = async (req, res, next) => {
     try {
         const board = req.locals.board.transform();
+
         if (checkOwner(board.owner._id,req.user._id)) {
-            return res.json({ board });
+            let columns = await Column.find({ boardId: board.id });
+            columns = columns.map(column => column.transform())
+            return res.json({ board, columns });
         }
         throw new APIError({
             message: "Something went wrong",
@@ -46,7 +50,11 @@ exports.get = async (req, res, next) => {
 exports.create = async (req, res, next) => {
     try {
         const owner = req.user._id;
+        const { columns } = req.body;
         let board = await new Board({ ...req.body, owner: owner }).save();
+        columns.forEach(async column => {
+            await new Column({ ...column, boardId: board.id }).save();
+        })
         board = await board
             .populate("owner", "email fullName avatar")
             .execPopulate();

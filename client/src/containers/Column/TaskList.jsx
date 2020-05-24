@@ -35,7 +35,6 @@ class InnerTaskList extends React.Component {
 class InnerList extends React.Component {
   render() {
     const { tasks, dropProvided } = this.props;
-
     return (
       <div ref={dropProvided.innerRef}>
         <InnerTaskList tasks={tasks} />
@@ -61,11 +60,15 @@ class TaskList extends React.Component {
     return (
       <Droppable
         droppableId={listId}
-        ignoreContainerClipping={ignoreContainerClipping}
-        isDropDisabled={isDropDisabled}
+        // ignoreContainerClipping={ignoreContainerClipping}
+        // isDropDisabled={isDropDisabled}
       >
         {(dropProvided, dropSnapshot) => (
-          <InnerList tasks={tasks} title={title} dropProvided={dropProvided} />
+          <div ref={dropProvided.innerRef}>
+        <InnerTaskList tasks={tasks} />
+        {dropProvided.placeholder}
+      </div>
+          // <InnerList tasks={tasks} title={title} dropProvided={dropProvided} />
         )}
       </Droppable>
     );

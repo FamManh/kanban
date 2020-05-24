@@ -18,7 +18,10 @@ exports.createValidation = {
                 name: Joi.string().max(128)
             }
         ],
-        members: [Joi.string().regex(/^[a-fA-F0-9]{24}$/)]
+        members: [Joi.string().regex(/^[a-fA-F0-9]{24}$/)],
+        columns: Joi.array().items(Joi.object({
+            name: Joi.string().required()
+        }))
     })
 };
 
@@ -53,7 +56,8 @@ exports.updateValidation = {
 exports.getValidation = {
     params: Joi.object({
         boardId: Joi.string()
-            .regex(/^[a-fA-F0-9]{24}$/)
+            .min(6)
+            // .regex(/^[a-fA-F0-9]{24}$/)
             .required()
     })
 };

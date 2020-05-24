@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import { notification, Modal } from "antd";
+import {getHistory} from '../configStore'
 
 const defaultErrorMessage = "Something went wrong";
 
@@ -15,21 +16,39 @@ const selectErrorCode = error => {
     return 500;
 };
 
+const login = () =>{
+    if(window){
+    window.localStorage.removeItem("kauth");
+    }
+    getHistory().push('/signin')
+
+}
+
 export default class Errors {
     static handle(error) {
         let errorCode = selectErrorCode(error);
         if (errorCode === httpStatus.NOT_FOUND) {
-            notification.error(selectErrorMessage(error));
+            Modal.error({
+                title: selectErrorMessage(error)
+            });
             return;
         }
         if (
-            errorCode === httpStatus.CONFLICT ||
-            errorCode === httpStatus.UNAUTHORIZED
+            errorCode === httpStatus.CONFLICT
         ) {
             Modal.error({
                 title: selectErrorMessage(error)
             });
         }
+            
+        if (errorCode === httpStatus.UNAUTHORIZED){
+            Modal.confirm({
+                title: selectErrorMessage(error),
+                okText: "Login",
+                cancelText: "Dismiss",
+                onOk: () => login()
+            });
+        } 
         return;
     }
 

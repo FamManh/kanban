@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const shortid = require("shortid");
 
 const taskSchema = new mongoose.Schema(
     {
@@ -41,6 +42,10 @@ const taskSchema = new mongoose.Schema(
                 type: mongoose.Types.ObjectId,
                 ref: "Column"
             }
+        },
+        shortid: {
+            type: String,
+            default: shortid.generate()
         }
     },
     { timestamps: true }
@@ -96,7 +101,8 @@ taskSchema.method({
             "color",
             "members",
             "sortOrder",
-            "columnId"
+            "columnId",
+            "shortid"
         ];
 
         fields.forEach(field => {

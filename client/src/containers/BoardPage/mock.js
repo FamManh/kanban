@@ -200,5 +200,35 @@ export default {
             title: "Email alerts",
             description: "Donec sed odio dui."
         }
+    ],
+    Completeddf: [
+        {
+            title: "Store new files",
+            description: "Sed posuere consectetur est at lobortis."
+        },
+        {
+            title: "Build landing page",
+            description:
+                "Maecenas sed diam eget risus varius blandit sit amet non magna."
+        },
+        {
+            title: "Setup basic layout",
+            description: "Vestibulum id ligula porta felis euismod semper.",
+            color: "info",
+
+            images: [
+                "/static/images/unsplash/15.jpg",
+                "/static/images/unsplash/16.jpg"
+            ]
+        },
+        {
+            title: "Graphical fixes",
+            description:
+                "Morbi leo risus, porta ac consectetur ac, vestibulum at eros."
+        },
+        {
+            title: "Email alerts",
+            description: "Donec sed odio dui."
+        }
     ]
 };

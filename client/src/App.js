@@ -20,7 +20,7 @@ const HomePage = () => {
         <div>
             This is home page{" "}
             <Button>
-                <Link to="/board">Go to Borad Page</Link>
+                <Link to="/b">Go to Borad Page</Link>
             </Button>
         </div>
     );
@@ -31,11 +31,18 @@ function App() {
             <Provider store={store}>
                 <ConnectedRouter history={getHistory()}>
                     <Switch>
-                        <AuthRoute path="/signin" exact ><Signin/></AuthRoute>
-                        <AuthRoute path="/signup" exact><Signup/></AuthRoute>
+                        <AuthRoute path="/signin" exact>
+                            <Signin />
+                        </AuthRoute>
+                        <AuthRoute path="/signup" exact>
+                            <Signup />
+                        </AuthRoute>
 
                         <Layout>
-                            <PrivateRoute path="/board" exact>
+                            <Route path="/demo" exact>
+                                <Board />
+                            </Route>
+                            <PrivateRoute path="/b/:id" exact>
                                 <Board />
                             </PrivateRoute>
                             <PrivateRoute path="/board/new" exact>

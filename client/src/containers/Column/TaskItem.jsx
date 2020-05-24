@@ -39,6 +39,7 @@ const TaskItem = ({ task, provided }) => {
           className={`shadow-sm bg-white mb-2 rounded`}
           css={`
               position: relative;
+              background-color: red;
           `}
           ref={provided.innerRef}
           {...provided.draggableProps}
@@ -61,7 +62,7 @@ const TaskItem = ({ task, provided }) => {
                   {task.description}
               </small>
           </div>
-          {task.images && (
+          {/* {task.images && (
               <Cover style={{ height: 150 }}>
                   <Carousel className="overflow-hidden">
                       {task.images.map((image, index) => (
@@ -78,7 +79,7 @@ const TaskItem = ({ task, provided }) => {
                       ))}
                   </Carousel>
               </Cover>
-          )}
+          )} */}
       </div>
   );
 };
