@@ -33,9 +33,9 @@ exports.get = async (req, res, next) => {
 exports.create = async (req, res, next) => {
     try {
         let task = await new Task(req.body).save();
-        task = await task
-            .populate("columnId", "name")
-            .execPopulate();
+        // task = await task
+        //     .populate("columnId", "name")
+        //     .execPopulate();
         res.status(httpStatus.CREATED);
         task = await task.transform();
         return res.json(task);

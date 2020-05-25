@@ -5,11 +5,8 @@ const initstate = {
     createLoading: false,
     findLoading: false,
     error: null,
-    data: {
-        board: null,
-        columns: []
-    }
-}
+    board: null,
+};
 
 const boardReducer = (state=initstate, {type, payload})=>
     produce(state, draft=>{
@@ -31,7 +28,7 @@ const boardReducer = (state=initstate, {type, payload})=>
                 break;
             case constants.BOARD_FIND_SUCCESS:
                 draft.findLoading = false;
-                draft.data = payload;
+                draft.board = payload;
                 break;
             case constants.BOARD_FIND_ERROR:
                 draft.findLoading = false;

@@ -3,7 +3,7 @@ const shortid = require("shortid");
 
 const taskSchema = new mongoose.Schema(
     {
-        name: {
+        title: {
             type: String,
             maxlength: 50,
             trim: true,
@@ -95,7 +95,7 @@ taskSchema.method({
         let transformed = {};
         const fields = [
             "id",
-            "name",
+            "title",
             "description",
             "labels",
             "color",

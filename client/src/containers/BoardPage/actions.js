@@ -1,4 +1,6 @@
 import constants from './constants'
+import columnConstants from "../Column/constants";
+
 import api from '../../api/api'
 import Errors from '../utils/errors'
 import { getHistory } from '../configStore';
@@ -26,12 +28,16 @@ const actions = {
 
              // call api
              const res = await api.get(`/board/${id}`);
-
+        
              dispatch({
                  type: constants.BOARD_FIND_SUCCESS,
-                 payload: res.data
+                 payload: res.data.board
              });
-             console.log(res.data);
+             
+             dispatch({
+                 type: columnConstants.COLUMN_FIND_SUCCESS,
+                 payload: res.data.columns,
+             });
 
              getHistory().push(`/b/${res.data.board.shortid}`);
          } catch (error) {

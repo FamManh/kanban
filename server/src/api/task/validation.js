@@ -2,7 +2,7 @@ const { Joi } = require("express-validation");
 
 exports.createValidation = {
     body: Joi.object({
-        name: Joi.string()
+        title: Joi.string()
             .min(1)
             .max(128)
             .required(),
@@ -10,7 +10,6 @@ exports.createValidation = {
             .max(2000),
         columnId: Joi.string().regex(/^[a-fA-F0-9]{24}$/).required(),
         color: Joi.string()
-            .required()
             .min(1)
             .max(20),
         labels: [Joi.string()],

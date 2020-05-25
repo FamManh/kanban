@@ -1,8 +1,9 @@
 const Board = require("./model");
 const Column = require('../column/model')
+const Task = require("../task/model");
 const httpStatus = require("http-status");
 const APIError = require("../../utils/APIError");
-
+const shortid = require('shortid')
 const checkOwner = (currentuserId, ownerId) => {
     if (currentuserId.toString() == ownerId.toString()) {
         return true;
@@ -20,6 +21,12 @@ exports.load = async (req, res, next, id) => {
     }
 };
 
+const getTaskByColumnId = async (columnId) => {
+    return Task.find({
+        columnId,
+    });
+}
+
 /**
  * Get board
  * @public
@@ -30,8 +37,14 @@ exports.get = async (req, res, next) => {
 
         if (checkOwner(board.owner._id,req.user._id)) {
             let columns = await Column.find({ boardId: board.id });
-            columns = columns.map(column => column.transform())
-            return res.json({ board, columns });
+            let resColumns = await Promise.all(
+                columns.map(async (column) => {
+                    const columnTemp = column.transform();
+                    columnTemp.tasks = await getTaskByColumnId(column.id);
+                    return columnTemp;
+                })
+            );
+            return res.json({ board, columns: resColumns });
         }
         throw new APIError({
             message: "Something went wrong",
@@ -53,7 +66,11 @@ exports.create = async (req, res, next) => {
         const { columns } = req.body;
         let board = await new Board({ ...req.body, owner: owner }).save();
         columns.forEach(async column => {
-            await new Column({ ...column, boardId: board.id }).save();
+            await new Column({
+                ...column,
+                boardId: board.id,
+                shortid: shortid.generate(),
+            }).save();
         })
         board = await board
             .populate("owner", "email fullName avatar")

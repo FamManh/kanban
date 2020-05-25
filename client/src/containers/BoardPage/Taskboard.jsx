@@ -11,6 +11,7 @@ import Text from 'antd/lib/typography/Text';
 import { useDispatch, useSelector } from 'react-redux';
 import actions from './actions'
 import selectors from './selectors';
+import columnSelectors from "../Column/selectors";
 
 const TitleWrapper = styled.div`
     height: 48px;
@@ -28,44 +29,44 @@ const ListsContainer = styled.div`
 const Taskboard = () => {
     const dispatch = useDispatch();
     let {id} = useParams();
-    const [columns, setColumn] = useState(MockTaskboard);
-    const [ordered, setOrder] = useState(Object.keys(columns));
+    const columns = useSelector(columnSelectors.selectColumns);
+    const board = useSelector(selectors.selectBoard)
+    // const [columns, setColumn] = useState(MockTaskboard);
+    // const [ordered, setOrder] = useState(Object.keys(columns));
 
  
     const onDragEnd = result => {
-         const { source, destination } = result;
-        // droped outside the list
-         if (!destination) return;
+        // const { source, destination } = result;
+        // // droped outside the list
+        //  if (!destination) return;
 
-        if (
-            source.droppableId === destination.droppableId &&
-            source.index === destination.index
-        ) {
-            return;
-        }
+        // if (
+        //     source.droppableId === destination.droppableId &&
+        //     source.index === destination.index
+        // ) {
+        //     return;
+        // }
 
-        if (result.type === "COLUMN") {
-            // const ordered = reorder(ordered, source.index, destination.index);
+        // if (result.type === "COLUMN") {
+        //     // const ordered = reorder(ordered, source.index, destination.index);
 
-            // setOrder(ordered);
+        //     // setOrder(ordered);
 
-            return;
-        }
+        //     return;
+        // }
 
-        const data = reorderQuoteMap({
-            quoteMap: columns,
-            source,
-            destination
-        });
+        // const data = reorderQuoteMap({
+        //     quoteMap: columns,
+        //     source,
+        //     destination
+        // });
 
-        setColumn(data.quoteMap);
+        // setColumn(data.quoteMap);
     };
 
     useEffect(() => {
         // call api
         dispatch(actions.doFind(id));
-         return () => {
-         };
     }, [])
 
     const menu = (
@@ -86,7 +87,7 @@ const Taskboard = () => {
             <TitleWrapper>
                 <div style={{ lineHeight: "48px" }}>
                     <Text style={{ color: "#73737c", fontSize: "22px" }}>
-                        Dash name
+                        {board && board.name}
                     </Text>
                     <Dropdown overlay={menu} trigger={["click"]}>
                         <Button
@@ -114,25 +115,19 @@ const Taskboard = () => {
             </TitleWrapper>
 
             <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="taskboard" type="COLUMN">
-                    {provided => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="full-workspace scroll-x text-nowrap px-2"
-                            // style={{ display: "flex", flexDirection: "row" }}
-                        >
-                            {ordered.map((key, index) => (
-                                <Column
-                                    key={key}
-                                    index={index}
-                                    title={key}
-                                    tasks={columns[key]}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </Droppable>
+                <div
+                    className="full-workspace scroll-x text-nowrap px-2"
+                    // style={{ display: "flex", flexDirection: "row" }}
+                >
+                    {columns.map((item, index) => (
+                        <Column
+                            key={item.id}
+                            index={index}
+                            info={item}
+                            tasks={[]}
+                        />
+                    ))}
+                </div>
             </DragDropContext>
         </div>
     );
