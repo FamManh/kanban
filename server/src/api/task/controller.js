@@ -1,6 +1,7 @@
 const Task = require("./model");
 const httpStatus = require("http-status");
 const APIError = require("../../utils/APIError");
+const shortid = require("shortid");
 
 exports.load = async (req, res, next, id) => {
     try {
@@ -32,7 +33,7 @@ exports.get = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
     try {
-        let task = await new Task(req.body).save();
+        let task = await new Task({ ...req.body, shortid: shortid.generate() }).save();
         // task = await task
         //     .populate("columnId", "name")
         //     .execPopulate();
@@ -57,6 +58,25 @@ exports.update = async (req, res, next) => {
         return next(error);
     }
 };
+
+/**
+ * Merge task
+ * @public
+ */
+exports.merge = async (req, res, next) => {
+    try {
+        const { columnId, sortOrder } = req.body;
+        const updateIndo = { columnId, sortOrder };
+        const task = await Task.findOneAndUpdate(
+            { shortid: req.body.taskId },
+            updateIndo
+        )
+        return res.json(task.transform());
+    } catch (error) {
+        return next(error);
+    }
+};
+
 
 /**
  * List task

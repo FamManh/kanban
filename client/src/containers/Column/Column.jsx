@@ -19,11 +19,13 @@ const Column = ({ tasks, index, info }) => {
             //     ...provided.draggableProps.style
             // }}
         >
-            <FormComp
-                visible={formCompVisible}
-                toggle={() => setFormCompVisible(!formCompVisible)}
-                columnId={info.id}
-            />
+            {formCompVisible && (
+                <FormComp
+                    visible={formCompVisible}
+                    toggle={() => setFormCompVisible(!formCompVisible)}
+                    columnId={info.shortid}
+                />
+            )}
             <Inner>
                 <div
                     style={{
@@ -43,11 +45,11 @@ const Column = ({ tasks, index, info }) => {
                 </div>
                 <div
                     // style={{ width: "400px" }}
-                    className="p-1 scroll-y"
+                    className="p-1"
                     // ref={provided.innerRef}
                     // {...provided.draggableProps}
                 >
-                    <TaskList listId={info.id} tasks={info.tasks} />
+                    <TaskList listId={info.shortid} tasks={info.tasks} />
                 </div>
             </Inner>
         </Wrapper>

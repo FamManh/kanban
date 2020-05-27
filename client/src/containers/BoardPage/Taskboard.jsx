@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import actions from './actions'
 import selectors from './selectors';
 import columnSelectors from "../Column/selectors";
+import columnActions from "../Column/actions";
+ 
 
 const TitleWrapper = styled.div`
     height: 48px;
@@ -36,16 +38,17 @@ const Taskboard = () => {
 
  
     const onDragEnd = result => {
-        // const { source, destination } = result;
-        // // droped outside the list
-        //  if (!destination) return;
+        const { source, destination } = result;
+        // droped outside the list
+         if (!destination) return;
 
-        // if (
-        //     source.droppableId === destination.droppableId &&
-        //     source.index === destination.index
-        // ) {
-        //     return;
-        // }
+        // cùng 1 cột cùng index 
+        if (
+            source.droppableId === destination.droppableId &&
+            source.index === destination.index
+        ) {
+            return;
+        }
 
         // if (result.type === "COLUMN") {
         //     // const ordered = reorder(ordered, source.index, destination.index);
@@ -55,13 +58,13 @@ const Taskboard = () => {
         //     return;
         // }
 
-        // const data = reorderQuoteMap({
-        //     quoteMap: columns,
-        //     source,
-        //     destination
-        // });
+        const data = reorderQuoteMap({
+            quoteMap: columns,
+            source,
+            destination
+        });
 
-        // setColumn(data.quoteMap);
+        dispatch(columnActions.doColumnReorder(data.quoteMap));
     };
 
     useEffect(() => {

@@ -5,6 +5,6 @@ const constants = {
 
     BOARD_FIND_START: `BOARD_FIND_START`,
     BOARD_FIND_SUCCESS: `BOARD_FIND_SUCCESS`,
-    BOARD_FIND_ERROR: `BOARD_FIND_ERROR`
+    BOARD_FIND_ERROR: `BOARD_FIND_ERROR`,
 };
 export default constants;

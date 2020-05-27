@@ -4,12 +4,15 @@ const Task = require("../task/model");
 const httpStatus = require("http-status");
 const APIError = require("../../utils/APIError");
 const shortid = require('shortid')
+const _ = require('lodash')
+
 const checkOwner = (currentuserId, ownerId) => {
     if (currentuserId.toString() == ownerId.toString()) {
         return true;
     }
     return false;
 };
+
 
 exports.load = async (req, res, next, id) => {
     try {
@@ -24,7 +27,7 @@ exports.load = async (req, res, next, id) => {
 const getTaskByColumnId = async (columnId) => {
     return Task.find({
         columnId,
-    });
+    }).sort("sortOrder");
 }
 
 /**
@@ -36,14 +39,17 @@ exports.get = async (req, res, next) => {
         const board = req.locals.board.transform();
 
         if (checkOwner(board.owner._id,req.user._id)) {
-            let columns = await Column.find({ boardId: board.id });
+            let columns = await Column.find({ boardId: board.id }).sort({
+                sortOrder:1,
+            });
             let resColumns = await Promise.all(
                 columns.map(async (column) => {
                     const columnTemp = column.transform();
-                    columnTemp.tasks = await getTaskByColumnId(column.id);
+                    columnTemp.tasks = await getTaskByColumnId(column.shortid);
                     return columnTemp;
                 })
             );
+            resColumns = _.orderBy(resColumns, ["sortOrder"], ["asc"]);
             return res.json({ board, columns: resColumns });
         }
         throw new APIError({
@@ -64,7 +70,11 @@ exports.create = async (req, res, next) => {
     try {
         const owner = req.user._id;
         const { columns } = req.body;
-        let board = await new Board({ ...req.body, owner: owner }).save();
+        let board = await new Board({
+            ...req.body,
+            owner: owner,
+            shortid: shortid.generate(),
+        }).save();
         columns.forEach(async column => {
             await new Column({
                 ...column,

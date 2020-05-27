@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {useDispatch, useSelector} from 'react-redux'
 import actions from '../actions'
 import selectors from "../selectors"
 import { Button, Modal, Form, Input, Radio } from "antd";
 
 function FormComp({ visible, toggle, columnId }) {
+    const inputTitleRef = useRef();
     const columns = useSelector(selectors.selectColumns)
     const dispatch = useDispatch();
     const onCreate = (values) => {
@@ -25,6 +26,9 @@ function FormComp({ visible, toggle, columnId }) {
         toggle();
     };
     const [form] = Form.useForm();
+    useEffect(() => {
+        // inputTitleRef.current.focus();
+    }, [])
     return (
         <Modal
             visible={visible}
@@ -32,6 +36,7 @@ function FormComp({ visible, toggle, columnId }) {
             okText="Create"
             cancelText="Cancel"
             onCancel={onCancel}
+            maskClosable={false}
             onOk={() => {
                 form.validateFields()
                     .then((values) => {
@@ -54,7 +59,7 @@ function FormComp({ visible, toggle, columnId }) {
                         },
                     ]}
                 >
-                    <Input />
+                    <Input ref={inputTitleRef} autoFocus />
                 </Form.Item>
                 <Form.Item name="description" label="Description">
                     <Input type="textarea" />

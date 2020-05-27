@@ -14,20 +14,16 @@ class InnerTaskList extends React.Component {
 
   render() {
     return this.props.tasks.map((task, index) => (
-      <Draggable
-        key={`${index}-${task.title}`}
-        draggableId={`${index}-${task.title}`}
-        index={index}
-      >
-        {(dragProvided, dragSnapshot) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            isDragging={dragSnapshot.isDragging}
-            provided={dragProvided}
-          />
-        )}
-      </Draggable>
+        <Draggable key={task.shortid} draggableId={task.shortid} index={index}>
+            {(dragProvided, dragSnapshot) => (
+                <TaskItem
+                    key={task.id}
+                    task={task}
+                    isDragging={dragSnapshot.isDragging}
+                    provided={dragProvided}
+                />
+            )}
+        </Draggable>
     ));
   }
 }
@@ -62,9 +58,10 @@ class TaskList extends React.Component {
         droppableId={listId}
         // ignoreContainerClipping={ignoreContainerClipping}
         // isDropDisabled={isDropDisabled}
+
       >
         {(dropProvided, dropSnapshot) => (
-          <div ref={dropProvided.innerRef}>
+          <div style={{minHeight:"100px"}} ref={dropProvided.innerRef}>
         <InnerTaskList tasks={tasks} />
         {dropProvided.placeholder}
       </div>

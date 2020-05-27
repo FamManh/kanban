@@ -51,7 +51,7 @@ function FormComponent() {
             return;
         }
         let isNameNull = false;
-        boardColumns.forEach(item => {
+        boardColumns.forEach((item, index) => {
             if (!item.name.trim()) {
                 isNameNull = true;
             }
@@ -62,6 +62,9 @@ function FormComponent() {
             });
             return;
         }
+        boardColumns.forEach((item, index)=>{
+            boardColumns[index].sortOrder = index * 500;
+        });
         dispatch(actions.doCreate({name: boardName, columns: boardColumns}));
     };
 
@@ -150,7 +153,9 @@ function FormComponent() {
                                 type="dashed"
                                 onClick={() => {
                                     const columns = boardColumns;
-                                    columns.push({ name: ""});
+                                    columns.push({
+                                        name: ""
+                                    });
                                     setBoardColumns(columns);
                                     add();
                                 }}

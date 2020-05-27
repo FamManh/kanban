@@ -14,13 +14,12 @@ const boardReducer = (state = initstate, { type, payload }) =>
                 draft.error = null;
                 break;
             case constants.COLUMN_CREATE_SUCCESS:
-                
-                state.columns.forEach((item, index)=>{
-                    // tìm id index column hiện tại và đẩy task mới tạo vào cuối mảng 
-                    if(item.id === payload.columnId){
-                        draft.columns[index].tasks.push(payload)
+                state.columns.forEach((item, index) => {
+                    // tìm id index column hiện tại và đẩy task mới tạo vào cuối mảng
+                    if (item.shortid === payload.columnId) {
+                        draft.columns[index].tasks.push(payload);
                     }
-                })
+                });
                 draft.createLoading = false;
                 break;
             case constants.COLUMN_CREATE_ERROR:
@@ -28,6 +27,9 @@ const boardReducer = (state = initstate, { type, payload }) =>
                 draft.error = payload || null;
                 break;
             case constants.COLUMN_FIND_SUCCESS:
+                draft.columns = payload;
+                break;
+            case constants.COLUMN_REORDER:
                 draft.columns = payload;
                 break;
             default:

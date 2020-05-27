@@ -1,6 +1,5 @@
 import constants from './constants'
 import columnConstants from "../Column/constants";
-
 import api from '../../api/api'
 import Errors from '../utils/errors'
 import { getHistory } from '../configStore';
@@ -44,7 +43,8 @@ const actions = {
              dispatch({ type: constants.BOARD_FIND_ERROR });
              Errors.handle(error);
          }
-    }
+    },
+
 }
 
 export default actions;

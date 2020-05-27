@@ -8,7 +8,7 @@ exports.createValidation = {
             .required(),
         description: Joi.string()
             .max(2000),
-        columnId: Joi.string().regex(/^[a-fA-F0-9]{24}$/).required(),
+        columnId: Joi.string().required(),
         color: Joi.string()
             .min(1)
             .max(20),

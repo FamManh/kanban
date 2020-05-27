@@ -7,35 +7,36 @@ const columnSchema = new mongoose.Schema(
             type: String,
             maxlength: 128,
             trim: true,
-            required: true
+            required: true,
         },
         description: {
             type: String,
             maxlength: 2000,
-            trim: true
+            trim: true,
         },
         taskProperties: {
             showDescription: {
                 type: Boolean,
-                default: true
+                default: true,
             },
             showLabel: {
                 type: Boolean,
-                default: true
+                default: true,
             },
             limitTaskCount: {
                 type: Number,
-                default: 0
-            }
+                default: 0,
+            },
         },
         boardId: {
             type: mongoose.Types.ObjectId,
-            ref: "Board"
+            ref: "Board",
         },
         shortid: {
             type: String,
-            default: shortid.generate()
-        }
+            required: true
+        },
+        sortOrder: Number,
     },
     { timestamps: true }
 );
@@ -88,7 +89,8 @@ columnSchema.method({
             "description",
             "taskProperties",
             "boardId",
-            "shortid"
+            "shortid",
+            "sortOrder",
         ];
 
         fields.forEach(field => {

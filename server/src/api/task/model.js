@@ -1,19 +1,20 @@
 const mongoose = require("mongoose");
 const shortid = require("shortid");
+const APIError = require("../../utils/APIError");
+const httpStatus = require("http-status");
 
 const taskSchema = new mongoose.Schema(
     {
         title: {
             type: String,
-            maxlength: 50,
+            maxlength: 500,
             trim: true,
             required: true
         },
         description: {
             type: String,
-            maxlength: 50,
-            trim: true,
-            required: true
+            maxlength: 2000,
+            trim: true
         },
         labels: [String],
         color: String,
@@ -26,8 +27,9 @@ const taskSchema = new mongoose.Schema(
             }
         ],
         columnId: {
-            type: mongoose.Types.ObjectId,
-            ref: "Column"
+            type: String,
+            ref: "Column",
+            path: "shortid"
         },
         sortOrder: Number,
         deleted: {
@@ -64,11 +66,9 @@ taskSchema.statics = {
     async get(id) {
         try {
             let task;
-            if (mongoose.Types.ObjectId.isValid(id)) {
-                task = await this.findById(id)
-                    .populate("columnId", "name")
-                    .exec();
-            }
+            task = await this.findOne({ shortid: id })
+                // .populate("columnId", "name")
+                .exec();
             if (task) {
                 return task;
             }

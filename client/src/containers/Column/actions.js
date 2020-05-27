@@ -14,14 +14,13 @@ const actions = {
                 type: constants.COLUMN_CREATE_SUCCESS,
                 payload: res.data,
             });
-
         } catch (error) {
             dispatch({ type: constants.COLUMN_CREATE_ERROR });
             Errors.handle(error);
         }
     },
 
-  
+    doColumnReorder: (data) => ({ type: constants.COLUMN_REORDER, payload: data }),
 };
 
 export default actions;

@@ -26,4 +26,10 @@ router
         controller.remove
     );
 
+router
+    .route("/:taskId/merge")
+    .post(
+        /*authorize(LOGGED_USER), validate(joi.getValidation), */ controller.merge
+    );
+
 module.exports = router;
