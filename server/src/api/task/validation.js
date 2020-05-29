@@ -33,11 +33,10 @@ exports.deleteValidation = {
 exports.updateValidation = {
     params: Joi.object({
         taskId: Joi.string()
-            .regex(/^[a-fA-F0-9]{24}$/)
             .required()
     }),
     body: Joi.object({
-        name: Joi.string()
+        title: Joi.string()
             .min(1)
             .max(128),
         description: Joi.string().max(2000),
@@ -56,7 +55,6 @@ exports.updateValidation = {
 exports.getValidation = {
     params: Joi.object({
         taskId: Joi.string()
-            .regex(/^[a-fA-F0-9]{24}$/)
             .required()
     })
 };

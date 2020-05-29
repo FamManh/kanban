@@ -1,7 +1,8 @@
 import React from 'react'
 import { Carousel } from 'antd';
 import styled from 'styled-components';
-
+import taskActions from '../Task/actions'
+import { useDispatch } from 'react-redux';
 const Cover = styled.div`
   position: relative;
   width: 100%;
@@ -34,8 +35,13 @@ const Cover = styled.div`
 `;
 
 const TaskItem = ({ task, provided }) => {
+  const dispatch = useDispatch();
+  const onClick = (taskId)=>{
+    dispatch(taskActions.doSelectTask(taskId));
+  }
   return (
       <div
+          onClick={() => onClick(task.shortid)}
           className={`shadow-sm bg-white mb-2 rounded`}
           css={`
               position: relative;
@@ -57,9 +63,12 @@ const TaskItem = ({ task, provided }) => {
               className={`bg-${task.color}`}
           />
           <div className="p-3">
-              <p className="mb-1">{task.title}</p>
+              <p className="mb-1">
+                  <strong>{task.title}</strong>
+              </p>
               <small className="text-muted d-block clearfix">
-                  {task.description}
+                  {task.description?.slice(0, 98)}
+                  {task.description?.length > 98 && "..."}
               </small>
           </div>
           {/* {task.images && (

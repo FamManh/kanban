@@ -6,11 +6,15 @@ const initstate = {
     findLoading: false,
     error: null,
     board: null,
+    boards: []
 };
 
 const boardReducer = (state=initstate, {type, payload})=>
     produce(state, draft=>{
         switch (type) {
+            case constants.BOARD_GET_LIST_SUCCESS:
+                draft.boards = payload;
+                break;
             case constants.BOARD_CREATE_START:
                 draft.createLoading = true;
                 draft.error = null;

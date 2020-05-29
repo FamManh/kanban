@@ -5,15 +5,16 @@ import Column from "../Column/Column";
 import MockTaskboard from "./mock";
 import styled from "styled-components";
 import { UserOutlined, DownOutlined, PlusOutlined } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Menu } from 'antd';
-import {useParams} from 'react-router-dom'
+import { Avatar, Button, Dropdown, Menu, Modal } from 'antd';
+import {useParams, Link, Route} from 'react-router-dom'
 import Text from 'antd/lib/typography/Text';
 import { useDispatch, useSelector } from 'react-redux';
 import actions from './actions'
 import selectors from './selectors';
 import columnSelectors from "../Column/selectors";
 import columnActions from "../Column/actions";
- 
+import taskSelectors from '../Task/selectors'
+import ModalTask from '../Task/ModalTask';
 
 const TitleWrapper = styled.div`
     height: 48px;
@@ -33,6 +34,8 @@ const Taskboard = () => {
     let {id} = useParams();
     const columns = useSelector(columnSelectors.selectColumns);
     const board = useSelector(selectors.selectBoard)
+    const boards = useSelector(selectors.selectBoards);
+    const taskId = useSelector(taskSelectors.selectTaskId)
     // const [columns, setColumn] = useState(MockTaskboard);
     // const [ordered, setOrder] = useState(Object.keys(columns));
 
@@ -50,14 +53,6 @@ const Taskboard = () => {
             return;
         }
 
-        // if (result.type === "COLUMN") {
-        //     // const ordered = reorder(ordered, source.index, destination.index);
-
-        //     // setOrder(ordered);
-
-        //     return;
-        // }
-
         const data = reorderQuoteMap({
             quoteMap: columns,
             source,
@@ -67,26 +62,33 @@ const Taskboard = () => {
         dispatch(columnActions.doColumnReorder(data.quoteMap));
     };
 
-    useEffect(() => {
+     useEffect(() => {
         // call api
         dispatch(actions.doFind(id));
+     }, [id]);
+
+    useEffect(() => {
+        // call api
+        dispatch(actions.list());
     }, [])
 
     const menu = (
-        <Menu style={{minWidth: "200px"}}>
-            <Menu.Item key="0">
-                <a href="#">Kanban Project</a>
-            </Menu.Item>
-            <Menu.Item key="1">
-                <a href="#">Awesome Chat Project</a>
-            </Menu.Item>
+        <Menu style={{ minWidth: "200px" }}>
+            {boards.map((item, index) => (
+                <Menu.Item key={index}>
+                    <Link to={`/b/${item.shortid}`}>{item.name}</Link>
+                </Menu.Item>
+            ))}
             <Menu.Divider />
-            <Menu.Item key="3">Create new board</Menu.Item>
+            <Menu.Item key="3">
+                <Link to="/board/new">Create new board</Link>
+            </Menu.Item>
         </Menu>
     );
 
     return (
         <div style={{ backgroundColor: "#f6f8fc" }}>
+            {taskId && <ModalTask/>}
             <TitleWrapper>
                 <div style={{ lineHeight: "48px" }}>
                     <Text style={{ color: "#73737c", fontSize: "22px" }}>

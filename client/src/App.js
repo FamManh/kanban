@@ -7,6 +7,7 @@ import { ConnectedRouter } from "connected-react-router";
 import { GlobalStyles } from "./components/GlobalStyles";
 import Layout from "./containers/Layout";
 import Board from "./containers/BoardPage";
+import Task from "./containers/Task";
 import BoardForm from "./containers/BoardPage/form";
 import Signin from "./containers/AuthPage/Signin";
 import Signup from "./containers/AuthPage/Signup";
@@ -42,6 +43,9 @@ function App() {
                             <Route path="/demo" exact>
                                 <Board />
                             </Route>
+                            <PrivateRoute path="/t/:boardId/:taskId" exact>
+                                <Task />
+                            </PrivateRoute>
                             <PrivateRoute path="/b/:id" exact>
                                 <Board />
                             </PrivateRoute>

@@ -29,8 +29,9 @@ const columnSchema = new mongoose.Schema(
             },
         },
         boardId: {
-            type: mongoose.Types.ObjectId,
+            type: String,
             ref: "Board",
+            path: "shortid"
         },
         shortid: {
             type: String,

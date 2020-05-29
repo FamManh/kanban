@@ -39,7 +39,7 @@ exports.get = async (req, res, next) => {
         const board = req.locals.board.transform();
 
         if (checkOwner(board.owner._id,req.user._id)) {
-            let columns = await Column.find({ boardId: board.id }).sort({
+            let columns = await Column.find({ boardId: board.shortid }).sort({
                 sortOrder:1,
             });
             let resColumns = await Promise.all(
@@ -75,10 +75,11 @@ exports.create = async (req, res, next) => {
             owner: owner,
             shortid: shortid.generate(),
         }).save();
+
         columns.forEach(async column => {
             await new Column({
                 ...column,
-                boardId: board.id,
+                boardId: board.shortid,
                 shortid: shortid.generate(),
             }).save();
         })

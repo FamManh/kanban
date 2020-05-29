@@ -7,11 +7,15 @@ const selectName = createSelector(
     board=>board.name
 )
 
-const selectBoard = createSelector([selectRaw], board => board.board);
+const selectBoard = createSelector([selectRaw], (board) => board.board);
+const selectBoards = createSelector([selectRaw], (board) => board.boards);
+
+
 
 const selector = {
     selectName,
-    selectBoard
+    selectBoard,
+    selectBoards,
 };
 
 export default selector;
