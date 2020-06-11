@@ -11,6 +11,7 @@ import Task from "./containers/Task";
 import BoardForm from "./containers/BoardPage/form";
 import Signin from "./containers/AuthPage/Signin";
 import Signup from "./containers/AuthPage/Signup";
+import ForgotPassword from "./containers/AuthPage/ForgotPassword";
 import PrivateRoute from "./containers/utils/PrivateRoute";
 import AuthRoute from "./containers/utils/AuthRoute";
 
@@ -37,6 +38,9 @@ function App() {
                         </AuthRoute>
                         <AuthRoute path="/signup" exact>
                             <Signup />
+                        </AuthRoute>
+                        <AuthRoute path="/forgot" exact>
+                            <ForgotPassword />
                         </AuthRoute>
 
                         <Layout>

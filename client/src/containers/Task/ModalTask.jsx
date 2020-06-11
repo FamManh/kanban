@@ -1,11 +1,13 @@
 import React from 'react'
-import {Modal} from 'antd';
+import { Modal, Button, Popover } from 'antd';
+import { UserOutlined, TagOutlined, CheckSquareOutlined, ClockCircleOutlined, LinkOutlined, PictureOutlined } from '@ant-design/icons';
 import actions from './actions'
 import selectors from './selectors'
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import styled from 'styled-components'
 import ToggleInput from '../../components/ToggleInput';
+import TextAreaInput from '../../components/ToggleTextArea';
 
 const TaskWrapper = styled.div`
     padding: 10px 15px;
@@ -17,10 +19,19 @@ const TaskWrapper = styled.div`
     .task-body {
         font-size: 14px;
         margin: 10px 0px 15px 0px;
+        display: flex;
+        justify-content: space-between;
     }
 `;
 
 function ModalTask() {
+    const text = <span>Title</span>;
+const content = (
+  <div>
+    <p>Content</p>
+    <p>Content</p>
+  </div>
+);
     const dispath = useDispatch();
     const taskId = useSelector(selectors.selectTaskId);
     let task = useSelector(selectors.selectTask);
@@ -28,6 +39,10 @@ function ModalTask() {
 
     const onBlurTitleInput = (value)=>{
         dispath(actions.doUpdate({ title: value }, taskId));
+    }
+
+    const onBlurDescriptionInput = (value)=>{
+        dispath(actions.doUpdate({ description: value }, taskId));
     }
 
     useEffect(()=>{
@@ -53,12 +68,65 @@ function ModalTask() {
                         onBlur={onBlurTitleInput}
                     />
                 </div>
-
                 <div className="task-body">
                     <div>
                         <strong>Mô tả</strong>
+                        <TextAreaInput
+                            value={task?.description}
+                            onBlur={onBlurDescriptionInput}
+                        />
                     </div>
-                    {task?.description}
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <p><strong>Thêm vào thẻ</strong></p>
+                        <Popover
+                            placement="bottom"
+                            title={text}
+                            content={content}
+                            trigger="click"
+                        >
+                            <Button><UserOutlined />Thành viên</Button>
+                        </Popover>
+                        <Popover
+                            placement="bottom"
+                            title={text}
+                            content={content}
+                            trigger="click"
+                        >
+                            <Button><TagOutlined />Nhãn</Button>
+                        </Popover>
+                        <Popover
+                            placement="bottom"
+                            title={text}
+                            content={content}
+                            trigger="click"
+                        >
+                            <Button><CheckSquareOutlined />Việc cần làm</Button>
+                        </Popover>
+                        <Popover
+                            placement="bottom"
+                            title={text}
+                            content={content}
+                            trigger="click"
+                        >
+                            <Button><ClockCircleOutlined />Ngày hết hạn</Button>
+                        </Popover>
+                        <Popover
+                            placement="bottom"
+                            title={text}
+                            content={content}
+                            trigger="click"
+                        >
+                            <Button><LinkOutlined />Đính kèm</Button>
+                        </Popover>
+                        <Popover
+                            placement="bottom"
+                            title={text}
+                            content={content}
+                            trigger="click"
+                        >
+                            <Button><PictureOutlined />Ảnh bìa</Button>
+                        </Popover>
+                    </div>
                 </div>
             </TaskWrapper>
         </Modal>

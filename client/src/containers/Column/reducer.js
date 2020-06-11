@@ -3,7 +3,7 @@ import constants from "./constants";
 const initstate = {
     createLoading: false,
     error: null,
-    columns: []
+    columns: [],
 };
 
 const boardReducer = (state = initstate, { type, payload }) =>
@@ -31,6 +31,19 @@ const boardReducer = (state = initstate, { type, payload }) =>
                 break;
             case constants.COLUMN_REORDER:
                 draft.columns = payload;
+                break;
+            case constants.COLUMN_TASK_UPDATE_SUCCESS:
+                state.columns.forEach((column, columnIndex) => {
+                    if (column.shortid === payload.columnId) {
+                        column.tasks.forEach((task, taskIndex) => {
+                            if (task.shortid === payload.shortid) {
+                                draft.columns[columnIndex].tasks[
+                                    taskIndex
+                                ] = payload;
+                            }
+                        });
+                    }
+                });
                 break;
             default:
                 break;

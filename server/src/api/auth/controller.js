@@ -6,6 +6,7 @@ const {omit} = require('lodash')
 const moment = require('moment');
 const httpStatus = require('http-status')
 
+require('dotenv').config()
 
 const generateTokenResponse = (user, accessToken)=>{
     const expiresIn = moment().add(jwtExpirationInterval, 'minutes');
@@ -36,5 +37,14 @@ exports.login = async (req, res, next) => {
         return res.json({token, user: userTransformed})
     } catch (error) {
         next(error)
+    }
+};
+
+exports.resetPassword = async (req, res, next) => {
+    try {
+        const { user, accessToken } = await User.findAndGenerateToken(req.body);
+        return res.json({ user: userTransformed })
+    } catch (error) {   
+        next(error);
     }
 };

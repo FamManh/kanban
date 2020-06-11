@@ -1,4 +1,5 @@
 import constants from "./constants";
+import columnConstants from "../Column/constants";
 import api from "../../api/api";
 import Errors from "../utils/errors";
 import { getHistory } from "../configStore";
@@ -33,6 +34,10 @@ const actions = {
 
             dispatch({
                 type: constants.TASK_UPDATE_SUCCESS,
+                payload: res.data,
+            });
+            dispatch({
+                type: columnConstants.COLUMN_TASK_UPDATE_SUCCESS,
                 payload: res.data,
             });
         } catch (error) {
